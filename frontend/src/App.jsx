@@ -7,7 +7,7 @@ import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { DashboardPage } from "./pages/DashboardPage";
-import { ProtectedRoute } from "./utils/protectedRoute";
+import { ProtectedRoute } from "./utils/ProtectedRoute";
 
 export const App = () => {
   return (
