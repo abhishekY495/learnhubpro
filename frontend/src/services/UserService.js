@@ -23,7 +23,7 @@ export const register = async (userDetails, { rejectWithValue }) => {
 };
 
 export const login = async (userCredentials, { rejectWithValue }) => {
-  const toastId = toast.loading("Registering");
+  const toastId = toast.loading("Logging In");
   try {
     const response = await axios.post(LOGIN_API_URL, userCredentials);
     const user = await response?.data;
@@ -77,7 +77,6 @@ export const deleteUserProfile = async (token, { rejectWithValue }) => {
     localStorage.clear();
     toast.success("Account Deleted", { id: toastId });
   } catch (error) {
-    console.log(error);
     toast.error(error?.response?.data?.message, { id: toastId });
     return rejectWithValue(error?.response?.data?.message || error);
   }
