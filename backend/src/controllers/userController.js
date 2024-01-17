@@ -78,41 +78,36 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
 // @route   /api/user/profile
 // @access  Private
-export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = {
-    _id: req.user._id,
-    fullName: req.user.fullName,
-    email: req.user.email,
-    enrolledCourses: req.user.enrolledCourses,
-  };
-  res.status(200).json(user);
-});
-
-// @route   /api/user/profile
-// @access  Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  if (user) {
-    try {
-      user.fullName = req.body.fullName || user.fullName;
-      user.email = req.body.email || user.email;
-      if (req.body.password) {
-        user.password = await hashPassword(req.body.password);
+  try {
+    const decodedToken = decodeToken(req.body.token);
+    const user = await User.findById(decodedToken);
+    if (user) {
+      if (user.email !== guestEmail) {
+        user.fullName = req.body.fullName || user.fullName;
+        user.email = req.body.email || user.email;
+        if (req.body.password) {
+          user.password = await hashPassword(req.body.password);
+        }
+        const updatedUser = await user.save();
+        res.status(200).json({
+          _id: updatedUser._id,
+          fullName: updatedUser.fullName,
+          email: updatedUser.email,
+          enrolledCourses: updatedUser.enrolledCourses,
+          token: generateToken(updatedUser._id),
+        });
+      } else {
+        res.status(404);
+        throw new Error("Cannot Update Guest Account");
       }
-      const updatedUser = await user.save();
-      res.status(200).json({
-        _id: updatedUser._id,
-        fullName: updatedUser.fullName,
-        email: updatedUser.email,
-        enrolledCourses: updatedUser.enrolledCourses,
-      });
-    } catch (error) {
+    } else {
       res.status(404);
-      throw new Error("Email already in use");
+      throw new Error("User not found");
     }
-  } else {
+  } catch (error) {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error("Cannot Update Guest Account");
   }
 });
 

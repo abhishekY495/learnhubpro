@@ -4,7 +4,6 @@ import {
   register,
   login,
   logout,
-  getUserProfile,
   updateUserProfile,
   deleteUserProfile,
 } from "../services/UserService";
@@ -12,7 +11,6 @@ import {
 export const registerUser = createAsyncThunk("user/registerUser", register);
 export const loginUser = createAsyncThunk("user/loginUser", login);
 export const logoutUser = createAsyncThunk("user/logoutUser", logout);
-export const getUser = createAsyncThunk("user/getUser", getUserProfile);
 export const updateUser = createAsyncThunk(
   "user/updateUser",
   updateUserProfile
@@ -86,7 +84,7 @@ export const userSlice = createSlice({
         state.loginLoading = false;
         state.userData = null;
       })
-      //  Logout
+      // Logout
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.userData = null;
         //
@@ -106,7 +104,7 @@ export const userSlice = createSlice({
         state.deleteAccountError = false;
         state.deleteAccountErrorMessage = null;
       })
-      //  Delete User
+      // Delete User
       .addCase(deleteUser.pending, (state, action) => {
         state.deleteAccountLoading = true;
         state.deleteAccountError = false;
@@ -122,6 +120,23 @@ export const userSlice = createSlice({
         state.deleteAccountErrorMessage = action.payload;
         state.deleteAccountError = true;
         state.deleteAccountLoading = false;
+      })
+      // Update user
+      .addCase(updateUser.pending, (state, action) => {
+        state.updateProfileLoading = true;
+        state.updateProfileError = false;
+        state.updateProfileErrorMessage = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.userData = action.payload;
+        state.updateProfileLoading = false;
+        state.updateProfileError = false;
+        state.updateProfileErrorMessage = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.updateProfileErrorMessage = action.payload;
+        state.updateProfileError = true;
+        state.updateProfileLoading = false;
       });
   },
 });

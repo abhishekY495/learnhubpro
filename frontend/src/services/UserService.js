@@ -48,25 +48,17 @@ export const logout = async (_, { rejectWithValue }) => {
   }
 };
 
-export const getUserProfile = async (jwtToken, { rejectWithValue }) => {
+export const updateUserProfile = async (userData, { rejectWithValue }) => {
+  const toastId = toast.loading("Updating Details");
   try {
-    const response = await axios.get(USER_PROFILE_API_URL, jwtToken);
+    const response = await axios.put(USER_PROFILE_API_URL, userData);
     const user = await response?.data;
     localStorage.setItem("userData", JSON.stringify(user));
+    toast.success("Updated Details", { id: toastId });
     return user;
   } catch (error) {
+    toast.error(error?.response?.data?.message, { id: toastId });
     return rejectWithValue(error?.response?.data?.message || error);
-  }
-};
-
-export const updateUserProfile = async (jwtToken) => {
-  try {
-    const response = await axios.get(USER_PROFILE_API_URL, jwtToken);
-    const user = response?.data;
-    localStorage.setItem("userData", JSON.stringify(user));
-    return user;
-  } catch (error) {
-    return error?.response?.data?.message || error;
   }
 };
 
