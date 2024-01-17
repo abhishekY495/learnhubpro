@@ -1,22 +1,32 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { deleteUser, logoutUser } from "../features/userSlice";
+import { logoutUser } from "../features/userSlice";
 import { EditDetailsModal } from "./modals/EditDetailsModal";
+import { DeleteAccountModal } from "./modals/DeleteAccountModal";
 
-export const UserDetails = ({ userData }) => {
-  const { fullName, email, enrolledCourses, token } = userData;
-  const [openModal, setOpenModal] = useState(false);
+export const UserDetails = () => {
+  const {
+    userData: { fullName, email, enrolledCourses },
+  } = useSelector((state) => state.user);
+  const [editDetailsOpenModal, setEditDetailsOpenModal] = useState(false);
+  const [deleteAccountOpenModal, setDeleteAccountOpenModal] = useState(false);
   const dispatch = useDispatch();
 
-  const enrolledCourseCount = enrolledCourses?.length;
-
   const logoutBtnHandler = () => dispatch(logoutUser());
-  const deleteAccountBtnHandler = () => dispatch(deleteUser(token));
 
   return (
     <>
-      <EditDetailsModal openModal={openModal} setOpenModal={setOpenModal} />
+      {editDetailsOpenModal && (
+        <EditDetailsModal
+          openModal={editDetailsOpenModal}
+          setOpenModal={setEditDetailsOpenModal}
+        />
+      )}
+      <DeleteAccountModal
+        openModal={deleteAccountOpenModal}
+        setOpenModal={setDeleteAccountOpenModal}
+      />
       <div className="flex flex-col w-[820px] m-auto mt-5 px-8 max-[820px]:w-full">
         <p className="text-lg leading-6">
           <span className="font-bold">Full Name - </span>
@@ -30,7 +40,7 @@ export const UserDetails = ({ userData }) => {
           <div className="flex gap-1">
             <button
               className="bg-neutral-500 text-white p-1 px-6 font-semibold rounded hover:opacity-95"
-              onClick={() => setOpenModal(true)}
+              onClick={() => setEditDetailsOpenModal(true)}
             >
               Edit
             </button>
@@ -43,14 +53,14 @@ export const UserDetails = ({ userData }) => {
           </div>
           <button
             className="border border-red-500 text-red-500 p-1 px-6 font-semibold rounded hover:bg-red-500 hover:text-white"
-            onClick={deleteAccountBtnHandler}
+            onClick={() => setDeleteAccountOpenModal(true)}
           >
             Delete
           </button>
         </div>
         <hr className="mt-3 mb-2" />
         <p className="text-3xl font-bold underline mb-4">
-          Enrolled Courses ({enrolledCourseCount})
+          Enrolled Courses ({enrolledCourses?.length})
         </p>
       </div>
     </>
