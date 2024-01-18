@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import { Course } from "../components/Course";
 import { Pagination } from "../components/Pagination";
@@ -15,8 +16,8 @@ export const HomePage = () => {
   );
 
   const getCourses = async () => {
-    const response = await fetch(`${apiUrl}/course?page=${pageNumber}`);
-    const data = await response.json();
+    const response = await axios.get(`${apiUrl}/course?page=${pageNumber}`);
+    const data = await response.data;
     setCourses(data.courses);
     setNumberOfPages(Math.ceil(data.totalNumberOfCourses / 6));
     setShowMessage(false);
@@ -30,7 +31,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <div className="flex flex-col mt-3">
+      <div className="flex flex-col">
         {showMessage && <Message />}
         {courses.length === 0 && <Shimmer />}
         {courses.map((course) => {
