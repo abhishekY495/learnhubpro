@@ -122,10 +122,10 @@ export const deleteUserProfile = asyncHandler(async (req, res) => {
       res.status(200).json({ message: "Account Deleted" });
     } else {
       res.status(400);
-      throw new Error("Cannot delete Guest Account");
+      throw new Error("Cannot Delete Guest Account");
     }
   } catch (error) {
     res.status(400);
-    throw new Error("Cannot delete Guest Account");
+    throw new Error("Cannot Delete Guest Account");
   }
 });
