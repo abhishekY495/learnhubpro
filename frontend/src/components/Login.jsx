@@ -42,7 +42,7 @@ export const Login = () => {
 
   return (
     <>
-      <h1 className="text-3xl text-center font-bold mt-10 mb-5">Login</h1>
+      <h1 className="text-3xl text-center font-bold my-5">Login</h1>
       <div className="flex flex-col gap-4 bg-neutral-200/50 text-black w-[400px] m-auto p-8 rounded">
         <label>
           <p className="font-semibold">
