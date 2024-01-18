@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const CourseDetails = ({ course }) => {
+export const Course = ({ course }) => {
   const { _id, thumbnail, title, description, instructors } = course;
   return (
     <Link

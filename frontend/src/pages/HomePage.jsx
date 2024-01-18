@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { CourseDetails } from "../components/CourseDetails";
+import { Course } from "../components/Course";
 import { Pagination } from "../components/Pagination";
 import { Message } from "../components/Message";
 import { Shimmer } from "../components/Shimmer";
@@ -34,7 +34,7 @@ export const HomePage = () => {
         {showMessage && <Message />}
         {courses.length === 0 && <Shimmer />}
         {courses.map((course) => {
-          return <CourseDetails course={course} key={course?._id} />;
+          return <Course course={course} key={course?._id} />;
         })}
       </div>
       {numberOfPages && (
