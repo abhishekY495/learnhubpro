@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../features/userSlice";
 import { EditDetailsModal } from "./modals/EditDetailsModal";
 import { DeleteAccountModal } from "./modals/DeleteAccountModal";
+import { EnrolledCourseCard } from "./EnrolledCourseCard";
 
 export const UserDetails = () => {
   const {
@@ -27,7 +28,7 @@ export const UserDetails = () => {
         openModal={deleteAccountOpenModal}
         setOpenModal={setDeleteAccountOpenModal}
       />
-      <div className="flex flex-col w-[820px] m-auto mt-5 px-8 max-[820px]:w-full">
+      <div className="flex flex-col w-[820px] m-auto mt-5 px-8 max-[820px]:w-full h-screen">
         <p className="text-lg leading-6">
           <span className="font-bold">Full Name - </span>
           {fullName}
@@ -59,9 +60,17 @@ export const UserDetails = () => {
           </button>
         </div>
         <hr className="mt-3 mb-2" />
-        <p className="text-3xl font-bold underline mb-4">
-          Enrolled Courses ({enrolledCourses?.length})
-        </p>
+        <div>
+          <p className="text-3xl font-bold underline mb-4 max-[420px]:text-[26px]">
+            Enrolled Courses ({enrolledCourses?.length})
+          </p>
+          <div className="grid grid-cols-2 gap-5 max-[500px]:grid-cols-1">
+            {enrolledCourses.length !== 0 &&
+              enrolledCourses?.map((course) => (
+                <EnrolledCourseCard course={course} key={course?._id} />
+              ))}
+          </div>
+        </div>
       </div>
     </>
   );

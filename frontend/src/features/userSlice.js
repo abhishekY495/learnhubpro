@@ -6,6 +6,8 @@ import {
   logout,
   updateUserProfile,
   deleteUserProfile,
+  enroll,
+  unEnroll,
 } from "../services/UserService";
 
 export const registerUser = createAsyncThunk("user/registerUser", register);
@@ -19,6 +21,8 @@ export const deleteUser = createAsyncThunk(
   "user/deleteUser",
   deleteUserProfile
 );
+export const enrollCourse = createAsyncThunk("user/enrollCourse", enroll);
+export const unEnrollCourse = createAsyncThunk("user/unEnrollCourse", unEnroll);
 
 const initialState = {
   userData: JSON.parse(localStorage.getItem("userData")) || null,
@@ -38,6 +42,14 @@ const initialState = {
   deleteAccountLoading: false,
   deleteAccountError: false,
   deleteAccountErrorMessage: null,
+  //
+  enrollLoading: false,
+  enrollError: false,
+  enrollErrorMessage: null,
+  //
+  unEnrollLoading: false,
+  unEnrollError: false,
+  unEnrollErrorMessage: null,
 };
 
 export const userSlice = createSlice({
@@ -137,6 +149,40 @@ export const userSlice = createSlice({
         state.updateProfileErrorMessage = action.payload;
         state.updateProfileError = true;
         state.updateProfileLoading = false;
+      })
+      // Enroll Course
+      .addCase(enrollCourse.pending, (state, action) => {
+        state.enrollLoading = true;
+        state.enrollError = false;
+        state.enrollErrorMessage = null;
+      })
+      .addCase(enrollCourse.fulfilled, (state, action) => {
+        state.userData = action.payload;
+        state.enrollLoading = false;
+        state.enrollError = false;
+        state.enrollErrorMessage = null;
+      })
+      .addCase(enrollCourse.rejected, (state, action) => {
+        state.enrollErrorMessage = action.payload;
+        state.enrollError = true;
+        state.enrollLoading = false;
+      })
+      // UnEnroll Course
+      .addCase(unEnrollCourse.pending, (state, action) => {
+        state.unEnrollLoading = true;
+        state.unEnrollError = false;
+        state.unEnrollErrorMessage = null;
+      })
+      .addCase(unEnrollCourse.fulfilled, (state, action) => {
+        state.userData = action.payload;
+        state.unEnrollLoading = false;
+        state.unEnrollError = false;
+        state.unEnrollErrorMessage = null;
+      })
+      .addCase(unEnrollCourse.rejected, (state, action) => {
+        state.unEnrollErrorMessage = action.payload;
+        state.unEnrollError = true;
+        state.unEnrollLoading = false;
       });
   },
 });

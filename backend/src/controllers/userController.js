@@ -129,3 +129,96 @@ export const deleteUserProfile = asyncHandler(async (req, res) => {
     throw new Error("Cannot Delete Guest Account");
   }
 });
+
+// @route   /api/user/course/enroll
+// @access  Private
+export const enrollCourse = asyncHandler(async (req, res) => {
+  const { course, token } = req.body;
+
+  if (!token) {
+    res.status(404);
+    throw new Error("Not Authorized, No Token");
+  }
+  if (!course) {
+    res.status(404);
+    throw new Error("No Course to Enroll");
+  }
+
+  if (token && course) {
+    const id = decodeToken(token);
+    const user = await User.findById(id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error("Not Authorized");
+    }
+
+    // Already Enrolled Check
+    const courseEnrolledCheck = user.enrolledCourses.some(
+      ({ _id }) => _id === course._id
+    );
+    if (courseEnrolledCheck) {
+      res.status(404);
+      throw new Error("Already Enrolled");
+    }
+
+    if (user && !courseEnrolledCheck) {
+      user.enrolledCourses = [...user.enrolledCourses, course];
+      const updatedUser = await user.save();
+      res.status(200).json({
+        _id: updatedUser._id,
+        fullName: updatedUser.fullName,
+        email: updatedUser.email,
+        enrolledCourses: updatedUser.enrolledCourses,
+        token: generateToken(updatedUser._id),
+      });
+    }
+  }
+});
+
+// @route   /api/user/course/unenroll
+// @access  Private
+export const unenrollCourse = asyncHandler(async (req, res) => {
+  const { courseId, token } = req.body;
+
+  if (!token) {
+    res.status(404);
+    throw new Error("Not Authorized, No Token");
+  }
+  if (!courseId) {
+    res.status(404);
+    throw new Error("No CourseId found");
+  }
+
+  if (token && courseId) {
+    const id = decodeToken(token);
+    const user = await User.findById(id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error("Not Authorized");
+    }
+
+    const courseExistsCheck = user.enrolledCourses.some(
+      ({ _id }) => _id === courseId
+    );
+    if (!courseExistsCheck) {
+      res.status(404);
+      throw new Error("No such course found");
+    }
+
+    if (user && courseExistsCheck) {
+      user.enrolledCourses = user.enrolledCourses.filter(
+        ({ _id }) => _id !== courseId
+      );
+      const updatedUser = await user.save();
+      res.status(200).json({
+        _id: updatedUser._id,
+        fullName: updatedUser.fullName,
+        email: updatedUser.email,
+        enrolledCourses: updatedUser.enrolledCourses,
+        token: generateToken(updatedUser._id),
+      });
+    }
+  }
+});

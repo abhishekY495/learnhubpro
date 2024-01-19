@@ -9,6 +9,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
 import { CoursePage } from "./pages/CoursePage";
+import { EnrolledCoursePage } from "./pages/EnrolledCoursePage";
 
 export const App = () => {
   return (
@@ -29,6 +30,14 @@ export const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/course/:id" element={<CoursePage />} />
+        <Route
+          path="/enrolledcourse/:id"
+          element={
+            <ProtectedRoute>
+              <EnrolledCoursePage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );

@@ -7,6 +7,8 @@ const REGISTER_API_URL = apiUrl + "/api/user/register";
 const LOGIN_API_URL = apiUrl + "/api/user/login";
 const LOGOUT_API_URL = apiUrl + "/api/user/logout";
 const USER_PROFILE_API_URL = apiUrl + "/api/user/profile";
+const ENROLL_COURSE_API_URL = apiUrl + "/api/user/enroll";
+const UNENROLL_COURSE_API_URL = apiUrl + "/api/user/unenroll";
 
 export const register = async (userDetails, { rejectWithValue }) => {
   const toastId = toast.loading("Registering");
@@ -68,6 +70,34 @@ export const deleteUserProfile = async (token, { rejectWithValue }) => {
     await axios.delete(USER_PROFILE_API_URL, { data: { token } });
     localStorage.clear();
     toast.success("Account Deleted", { id: toastId });
+  } catch (error) {
+    toast.error(error?.response?.data?.message, { id: toastId });
+    return rejectWithValue(error?.response?.data?.message || error);
+  }
+};
+
+export const enroll = async (data, { rejectWithValue }) => {
+  const toastId = toast.loading("Enrolling");
+  try {
+    const response = await axios.post(ENROLL_COURSE_API_URL, data);
+    const user = await response?.data;
+    localStorage.setItem("userData", JSON.stringify(user));
+    toast.success("Enrolled", { id: toastId });
+    return user;
+  } catch (error) {
+    toast.error(error?.response?.data?.message, { id: toastId });
+    return rejectWithValue(error?.response?.data?.message || error);
+  }
+};
+
+export const unEnroll = async (data, { rejectWithValue }) => {
+  const toastId = toast.loading("Un-Enrolling");
+  try {
+    const response = await axios.post(UNENROLL_COURSE_API_URL, data);
+    const user = await response?.data;
+    localStorage.setItem("userData", JSON.stringify(user));
+    toast.success("Un-Enrolled", { id: toastId });
+    return user;
   } catch (error) {
     toast.error(error?.response?.data?.message, { id: toastId });
     return rejectWithValue(error?.response?.data?.message || error);
