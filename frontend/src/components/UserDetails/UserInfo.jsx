@@ -14,12 +14,10 @@ export const UserInfo = ({ fullName, email }) => {
 
   return (
     <>
-      {editDetailsOpenModal && (
-        <EditDetailsModal
-          openModal={editDetailsOpenModal}
-          setOpenModal={setEditDetailsOpenModal}
-        />
-      )}
+      <EditDetailsModal
+        openModal={editDetailsOpenModal}
+        setOpenModal={setEditDetailsOpenModal}
+      />
       <DeleteAccountModal
         openModal={deleteAccountOpenModal}
         setOpenModal={setDeleteAccountOpenModal}
