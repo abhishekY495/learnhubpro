@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { UserInfo } from "./UserDetails/UserInfo";
-import { EnrolledCourses } from "./UserDetails/EnrolledCourses";
+import { UserInfo } from "./UserInfo";
+import { EnrolledCourses } from "./EnrolledCourses";
 
 export const UserDetails = () => {
   const {

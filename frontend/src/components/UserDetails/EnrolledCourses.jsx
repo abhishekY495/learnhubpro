@@ -1,6 +1,6 @@
 import React from "react";
 
-import { EnrolledCourseCard } from "../EnrolledCourseCard";
+import { EnrolledCourseCard } from "./EnrolledCourseCard";
 
 export const EnrolledCourses = ({ courses }) => {
   return (
