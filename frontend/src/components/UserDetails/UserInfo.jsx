@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { EditDetailsModal } from "../Modals/EditDetailsModal.jsx";
-import { DeleteAccountModal } from "../Modals/DeleteAccountModal.jsx";
+import { EditDetailsModal } from "../Modals/EditDetailsModal";
+import { DeleteAccountModal } from "../Modals/DeleteAccountModal";
 import { logoutUser } from "../../features/userSlice";
 
 export const UserInfo = ({ fullName, email }) => {
