@@ -8,6 +8,7 @@ import {
   deleteUserProfile,
   enrollCourse,
   unenrollCourse,
+  toggleMarkAsDoneTopic,
 } from "../controllers/userController.js";
 
 export const userRoutes = express.Router();
@@ -18,3 +19,4 @@ userRoutes.post("/logout", logoutUser);
 userRoutes.route("/profile").put(updateUserProfile).delete(deleteUserProfile);
 userRoutes.post("/enroll", enrollCourse);
 userRoutes.post("/unenroll", unenrollCourse);
+userRoutes.put("/course", toggleMarkAsDoneTopic);

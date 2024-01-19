@@ -7,8 +7,7 @@ import { hashPassword } from "../utils/hashPassword.js";
 import { guestEmail } from "../utils/guestEmail.js";
 import { decodeToken } from "../utils/decodeToken.js";
 
-// @route   /api/user/register
-// @access  Public
+// api/user/register
 export const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, password } = req.body;
 
@@ -44,8 +43,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @route   /api/user/login
-// @access  Public
+// api/user/login
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -70,14 +68,12 @@ export const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @route   /api/user/logout
-// @access  Public
+// api/user/logout
 export const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "User logged out" });
 });
 
-// @route   /api/user/profile
-// @access  Private
+// api/user/profile
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { token, fullName, email, password } = req.body;
 
@@ -122,8 +118,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @route   /api/user/profile
-// @access  Private
+// api/user/profile
 export const deleteUserProfile = asyncHandler(async (req, res) => {
   const { token } = req.body;
 
@@ -149,8 +144,7 @@ export const deleteUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @route   /api/user/course/enroll
-// @access  Private
+// api/user/course/enroll
 export const enrollCourse = asyncHandler(async (req, res) => {
   const { course, token } = req.body;
 
@@ -195,8 +189,7 @@ export const enrollCourse = asyncHandler(async (req, res) => {
   }
 });
 
-// @route   /api/user/course/unenroll
-// @access  Private
+// api/user/course/unenroll
 export const unenrollCourse = asyncHandler(async (req, res) => {
   const { courseId, token } = req.body;
 
@@ -240,4 +233,50 @@ export const unenrollCourse = asyncHandler(async (req, res) => {
       });
     }
   }
+});
+
+// api/user/course/topic
+export const toggleMarkAsDoneTopic = asyncHandler(async (req, res) => {
+  const { token, courseId, week, topicName } = req.body;
+
+  if (!token) {
+    res.status(400);
+    throw new Error("Not Authorized, No Token");
+  }
+
+  if (!(courseId && week && topicName)) {
+    res.status(400);
+    throw new Error("Provide Data to Mark as Done/UnDone");
+  }
+
+  const id = decodeToken(token);
+  const user = await User.findById(id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Not Authorized");
+  }
+
+  user.enrolledCourses = user.enrolledCourses.map((course) => {
+    if (course._id === courseId) {
+      course.content[week - 1].topics = course.content[week - 1].topics.map(
+        (topic) =>
+          topic.name === topicName
+            ? { ...topic, markAsDone: !topic.markAsDone }
+            : topic
+      );
+    }
+    return course;
+  });
+
+  user.markModified("enrolledCourses");
+  const updatedUser = await user.save();
+
+  res.status(200).json({
+    _id: updatedUser._id,
+    fullName: updatedUser.fullName,
+    email: updatedUser.email,
+    enrolledCourses: updatedUser.enrolledCourses,
+    token: generateToken(updatedUser._id),
+  });
 });

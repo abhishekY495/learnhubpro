@@ -8,6 +8,7 @@ import {
   deleteUserProfile,
   enroll,
   unEnroll,
+  toggleTopic,
 } from "../services/UserService";
 
 export const registerUser = createAsyncThunk("user/registerUser", register);
@@ -23,6 +24,10 @@ export const deleteUser = createAsyncThunk(
 );
 export const enrollCourse = createAsyncThunk("user/enrollCourse", enroll);
 export const unEnrollCourse = createAsyncThunk("user/unEnrollCourse", unEnroll);
+export const toggleMarkAsDoneTopic = createAsyncThunk(
+  "user/toggleMarkAsDoneTopic",
+  toggleTopic
+);
 
 const initialState = {
   userData: JSON.parse(localStorage.getItem("userData")) || null,
@@ -50,6 +55,10 @@ const initialState = {
   unEnrollLoading: false,
   unEnrollError: false,
   unEnrollErrorMessage: null,
+  //
+  toggleTopicLoading: false,
+  toggleTopicError: false,
+  toggleTopicErrorMessage: null,
 };
 
 export const userSlice = createSlice({
@@ -183,6 +192,23 @@ export const userSlice = createSlice({
         state.unEnrollErrorMessage = action.payload;
         state.unEnrollError = true;
         state.unEnrollLoading = false;
+      })
+      // Toggle Topic
+      .addCase(toggleMarkAsDoneTopic.pending, (state, action) => {
+        state.toggleTopicLoading = true;
+        state.toggleTopicError = false;
+        state.toggleTopicErrorMessage = null;
+      })
+      .addCase(toggleMarkAsDoneTopic.fulfilled, (state, action) => {
+        state.userData = action.payload;
+        state.toggleTopicLoading = false;
+        state.toggleTopicError = false;
+        state.toggleTopicErrorMessage = null;
+      })
+      .addCase(toggleMarkAsDoneTopic.rejected, (state, action) => {
+        state.toggleTopicError = action.payload;
+        state.toggleTopicErrorMessage = true;
+        state.toggleTopicLoading = false;
       });
   },
 });

@@ -9,6 +9,7 @@ const LOGOUT_API_URL = apiUrl + "/api/user/logout";
 const USER_PROFILE_API_URL = apiUrl + "/api/user/profile";
 const ENROLL_COURSE_API_URL = apiUrl + "/api/user/enroll";
 const UNENROLL_COURSE_API_URL = apiUrl + "/api/user/unenroll";
+const TOGGLE_TOPIC_API_URL = apiUrl + "/api/user/course";
 
 export const register = async (userDetails, { rejectWithValue }) => {
   const toastId = toast.loading("Registering");
@@ -100,6 +101,18 @@ export const unEnroll = async (data, { rejectWithValue }) => {
     return user;
   } catch (error) {
     toast.error(error?.response?.data?.message, { id: toastId });
+    return rejectWithValue(error?.response?.data?.message || error);
+  }
+};
+
+export const toggleTopic = async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.put(TOGGLE_TOPIC_API_URL, data);
+    const user = await response?.data;
+    localStorage.setItem("userData", JSON.stringify(user));
+    return user;
+  } catch (error) {
+    toast.error(error?.response?.data?.message);
     return rejectWithValue(error?.response?.data?.message || error);
   }
 };
