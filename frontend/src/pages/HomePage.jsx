@@ -33,8 +33,8 @@ export const HomePage = () => {
     <>
       <div className="flex flex-col">
         {showMessage && <Message />}
-        {courses.length === 0 && <Shimmer />}
-        {courses.map((course) => {
+        {courses?.length === 0 && <Shimmer />}
+        {courses?.map((course) => {
           return <Course course={course} key={course?._id} />;
         })}
       </div>
