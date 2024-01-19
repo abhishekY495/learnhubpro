@@ -47,12 +47,7 @@ export const EnrolledCourseDetails = () => {
         UN-ENROLL
       </button>
       <ProgressBar />
-      <hr className="my-4" />
-      <video
-        controls
-        src="https://res.cloudinary.com/dfuirkjxj/video/upload/v1701919645/video_hc57ys.mp4"
-        className="rounded-md mb-2"
-      ></video>
+      <hr className="mt-4 mb-2" />
       <div className="flex justify-between items-center">
         <p className="font-bold text-3xl mb-2">Content</p>
         <button
