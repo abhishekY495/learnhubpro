@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { ProgressBar } from "./ProgressBar";
-import { Content } from "./CourseDetails/Content";
-import { unEnrollCourse } from "../features/userSlice";
+import { Content } from "../CourseDetails/Content";
+import { unEnrollCourse } from "../../features/userSlice";
 
 export const EnrolledCourseDetails = () => {
   const [expandAll, setExpandAll] = useState(false);
@@ -31,7 +31,7 @@ export const EnrolledCourseDetails = () => {
   }, [enrolledCourse]);
 
   return (
-    <div className="w-[800px] m-auto mt-5 px-2 max-[820px]:w-full max-[820px]:mt-1">
+    <div className="w-[800px] m-auto mt-5 px-2 max-[820px]:w-full max-[820px]:mt-1 mb-[500px]">
       <Link className="flex gap-2" to={`/course/${id}`}>
         <img
           src={enrolledCourse?.thumbnail}
@@ -47,7 +47,12 @@ export const EnrolledCourseDetails = () => {
         UN-ENROLL
       </button>
       <ProgressBar />
-      <hr className="mb-2 mt-4" />
+      <hr className="my-4" />
+      <video
+        controls
+        src="https://res.cloudinary.com/dfuirkjxj/video/upload/v1701919645/video_hc57ys.mp4"
+        className="rounded-md mb-2"
+      ></video>
       <div className="flex justify-between items-center">
         <p className="font-bold text-3xl mb-2">Content</p>
         <button
@@ -58,7 +63,12 @@ export const EnrolledCourseDetails = () => {
         </button>
       </div>
       {enrolledCourse?.content?.map((cont) => (
-        <Content content={cont} key={cont.week} expandAll={expandAll} />
+        <Content
+          content={cont}
+          key={cont.week}
+          expandAll={expandAll}
+          course={enrolledCourse}
+        />
       ))}
     </div>
   );
