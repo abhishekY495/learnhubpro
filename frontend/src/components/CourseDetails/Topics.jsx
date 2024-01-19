@@ -15,7 +15,7 @@ export const Topics = ({ topics, course, week }) => {
   const toggleTopic = (topicName, topicStatus) => {
     const data = {
       token: userData.token,
-      courseId: course._id,
+      courseId: course?._id,
       week,
       topicName,
       topicStatus,
