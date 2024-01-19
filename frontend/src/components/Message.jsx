@@ -14,7 +14,7 @@ export const Message = () => {
             {" "}
             Render
           </a>
-          , so it may take some time to start
+          , so it may take <b>30</b>-<b>40</b> secs to start
         </p>
       </div>
     </div>
