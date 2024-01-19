@@ -12,12 +12,13 @@ export const Topics = ({ topics, course, week }) => {
   const [videoUrl, setVideoUrl] = useState("");
   const dispatch = useDispatch();
 
-  const toggleTopic = (topicName) => {
+  const toggleTopic = (topicName, topicStatus) => {
     const data = {
       token: userData.token,
       courseId: course._id,
       week,
       topicName,
+      topicStatus,
     };
     dispatch(toggleMarkAsDoneTopic(data));
   };
@@ -47,7 +48,7 @@ export const Topics = ({ topics, course, week }) => {
                 src={topic?.markAsDone ? doneIcon : unDoneIcon}
                 alt={topic?.markAsDone ? "done" : "unDone"}
                 className="w-5 hover:cursor-pointer"
-                onClick={() => toggleTopic(topic?.name)}
+                onClick={() => toggleTopic(topic?.name, topic?.markAsDone)}
               />
               <p
                 className={topic?.markAsDone ? "line-through" : null}

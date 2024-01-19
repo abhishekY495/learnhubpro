@@ -106,10 +106,21 @@ export const unEnroll = async (data, { rejectWithValue }) => {
 };
 
 export const toggleTopic = async (data, { rejectWithValue }) => {
+  let toastId;
+  if (data.topicStatus) {
+    toastId = toast.loading("Marking as Not Done");
+  } else {
+    toastId = toast.loading("Marking as Done");
+  }
   try {
     const response = await axios.put(TOGGLE_TOPIC_API_URL, data);
     const user = await response?.data;
     localStorage.setItem("userData", JSON.stringify(user));
+    if (data.topicStatus) {
+      toast.success("Marked as Not Done", { id: toastId });
+    } else {
+      toast.success("Marked as Done", { id: toastId });
+    }
     return user;
   } catch (error) {
     toast.error(error?.response?.data?.message);
