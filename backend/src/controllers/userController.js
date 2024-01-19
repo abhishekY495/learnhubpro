@@ -79,54 +79,73 @@ export const logoutUser = asyncHandler(async (req, res) => {
 // @route   /api/user/profile
 // @access  Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
-  try {
-    const decodedToken = decodeToken(req.body.token);
+  const { token, fullName, email, password } = req.body;
+
+  if (!token) {
+    res.status(400);
+    throw new Error("Not Authorized, No Token");
+  }
+
+  if (!(fullName || email || password)) {
+    res.status(400);
+    throw new Error("Provide Data to Update");
+  }
+
+  if (fullName || email || password) {
+    const decodedToken = decodeToken(token);
     const user = await User.findById(decodedToken);
-    if (user) {
-      if (user.email !== guestEmail) {
-        user.fullName = req.body.fullName || user.fullName;
-        user.email = req.body.email || user.email;
-        if (req.body.password) {
-          user.password = await hashPassword(req.body.password);
-        }
-        const updatedUser = await user.save();
-        res.status(200).json({
-          _id: updatedUser._id,
-          fullName: updatedUser.fullName,
-          email: updatedUser.email,
-          enrolledCourses: updatedUser.enrolledCourses,
-          token: generateToken(updatedUser._id),
-        });
-      } else {
-        res.status(404);
-        throw new Error("Cannot Update Guest Account");
-      }
-    } else {
-      res.status(404);
-      throw new Error("User not found");
+
+    if (!user) {
+      res.status(400);
+      throw new Error("Not Authorized");
     }
-  } catch (error) {
-    res.status(404);
-    throw new Error("Cannot Update Guest Account");
+
+    if (user.email === guestEmail) {
+      res.status(400);
+      throw new Error("Cannot Update Guest Account");
+    }
+
+    user.fullName = fullName || user.fullName;
+    user.email = email || user.email;
+
+    if (password) {
+      user.password = await hashPassword(password);
+    }
+    const updatedUser = await user.save();
+    res.status(200).json({
+      _id: updatedUser._id,
+      fullName: updatedUser.fullName,
+      email: updatedUser.email,
+      enrolledCourses: updatedUser.enrolledCourses,
+      token: generateToken(updatedUser._id),
+    });
   }
 });
 
 // @route   /api/user/profile
 // @access  Private
 export const deleteUserProfile = asyncHandler(async (req, res) => {
-  try {
-    const decodedToken = decodeToken(req.body.token);
-    const user = await User.findById(decodedToken);
-    if (user.email !== guestEmail) {
-      await User.findByIdAndDelete(decodedToken);
-      res.status(200).json({ message: "Account Deleted" });
-    } else {
-      res.status(400);
-      throw new Error("Cannot Delete Guest Account");
-    }
-  } catch (error) {
+  const { token } = req.body;
+
+  if (!token) {
+    res.status(400);
+    throw new Error("Not Authorized, No Token");
+  }
+
+  const _id = decodeToken(token);
+  const user = await User.findById(_id);
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Not Authorized");
+  }
+
+  if (user.email === guestEmail) {
     res.status(400);
     throw new Error("Cannot Delete Guest Account");
+  } else {
+    await User.deleteOne({ _id });
+    res.status(200).json({ message: "Account Deleted" });
   }
 });
 
