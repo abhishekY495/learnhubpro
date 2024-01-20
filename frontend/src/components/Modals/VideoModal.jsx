@@ -10,7 +10,7 @@ export const VideoModal = ({ openModal, setOpenModal, videoUrl }) => {
       <video
         src={videoUrl}
         controls
-        className="rounded-md w-[700px] m-auto mt-[100px]"
+        className="w-[700px] m-auto mt-[100px] px-2"
         onClick={(e) => e.stopPropagation()}
       ></video>
     </div>
