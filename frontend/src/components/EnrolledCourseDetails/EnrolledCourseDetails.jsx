@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -22,24 +22,21 @@ export const EnrolledCourseDetails = () => {
   const unenrollBtnHandler = () => {
     const data = { courseId: enrolledCourse?._id, token: userData?.token };
     dispatch(unEnrollCourse(data));
+    navigate("/dashboard");
   };
-
-  useEffect(() => {
-    if (!enrolledCourse) {
-      navigate("/dashboard");
-    }
-  }, [enrolledCourse]);
 
   return (
     <div className="w-[800px] m-auto mt-5 px-2 max-[820px]:w-full max-[820px]:mt-1 mb-[500px]">
-      <Link className="flex gap-2" to={`/course/${id}`}>
+      <div className="flex gap-2">
         <img
           src={enrolledCourse?.thumbnail}
           alt={enrolledCourse?.title}
           className="w-[25%] rounded-md object-cover mt-1 max-[600px]:hidden"
         />
-        <div>
-          <p className="text-3xl font-bold">{enrolledCourse?.title}</p>
+        <div className="flex flex-col justify-between w-full">
+          <Link to={`/course/${id}`}>
+            <p className="text-3xl font-bold">{enrolledCourse?.title}</p>
+          </Link>
           <button
             className="w-full mt-2 py-1 rounded text-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
             onClick={unenrollBtnHandler}
@@ -47,7 +44,8 @@ export const EnrolledCourseDetails = () => {
             UN-ENROLL
           </button>
         </div>
-      </Link>
+      </div>
+      <hr className="mt-4 mb-2" />
       <ProgressBar content={enrolledCourse?.content} />
       <hr className="mt-4 mb-2" />
       <div className="flex justify-between items-center">
