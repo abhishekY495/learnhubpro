@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Topics } from "./Topics";
 
-export const Content = ({ content, expandAll, course }) => {
+export const Content = ({ content, expandAll, course, enrolled }) => {
   const [activeWeek, setActiveWeek] = useState(false);
 
   const toggleWeek = () => setActiveWeek(!activeWeek);
@@ -27,7 +27,12 @@ export const Content = ({ content, expandAll, course }) => {
         Week {content?.week}
       </p>
       {activeWeek && (
-        <Topics topics={content?.topics} course={course} week={content?.week} />
+        <Topics
+          topics={content?.topics}
+          course={course}
+          week={content?.week}
+          enrolled={enrolled}
+        />
       )}
     </div>
   );

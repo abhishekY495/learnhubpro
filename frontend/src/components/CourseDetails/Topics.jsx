@@ -6,7 +6,7 @@ import unDoneIcon from "../../assets/topic/undoneIcon.png";
 import { toggleMarkAsDoneTopic } from "../../features/userSlice";
 import { VideoModal } from "../Modals/VideoModal";
 
-export const Topics = ({ topics, course, week }) => {
+export const Topics = ({ topics, course, week, enrolled }) => {
   const { userData } = useSelector((state) => state.user);
   const [videoModal, setVideoModal] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
@@ -39,7 +39,7 @@ export const Topics = ({ topics, course, week }) => {
       )}
       <ul className="py-2">
         {topics?.map((topic) => {
-          return userData ? (
+          return enrolled ? (
             <div
               className="flex items-center gap-2 ml-5 hover:cursor-pointer"
               key={topic?.name}

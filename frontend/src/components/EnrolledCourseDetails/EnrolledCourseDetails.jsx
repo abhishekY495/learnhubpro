@@ -65,6 +65,7 @@ export const EnrolledCourseDetails = () => {
           key={cont.week}
           expandAll={expandAll}
           course={enrolledCourse}
+          enrolled={true}
         />
       ))}
     </div>
