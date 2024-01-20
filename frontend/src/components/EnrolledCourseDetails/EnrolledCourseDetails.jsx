@@ -38,15 +38,17 @@ export const EnrolledCourseDetails = () => {
           alt={enrolledCourse?.title}
           className="w-[25%] rounded-md object-cover mt-1 max-[600px]:hidden"
         />
-        <p className="text-3xl font-bold">{enrolledCourse?.title}</p>
+        <div>
+          <p className="text-3xl font-bold">{enrolledCourse?.title}</p>
+          <button
+            className="w-full mt-2 py-1 rounded text-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
+            onClick={unenrollBtnHandler}
+          >
+            UN-ENROLL
+          </button>
+        </div>
       </Link>
-      <button
-        className="w-full my-2 py-1 rounded text-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
-        onClick={unenrollBtnHandler}
-      >
-        UN-ENROLL
-      </button>
-      <ProgressBar />
+      <ProgressBar content={enrolledCourse?.content} />
       <hr className="mt-4 mb-2" />
       <div className="flex justify-between items-center">
         <p className="font-bold text-3xl mb-2">Content</p>
